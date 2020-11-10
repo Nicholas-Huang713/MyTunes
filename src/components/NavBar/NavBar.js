@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import './NavBar.scss';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -15,6 +15,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import firebase from '../../firebase/firebase';
+import {UserContext} from '../../providers/UserProvider';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -83,10 +86,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar() {
     const classes = useStyles();
-
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-
+    const [isLogged, setIsLogged] = useState(false);
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -163,9 +165,30 @@ export default function NavBar() {
         </MenuItem>
         </Menu>
     );
+
+    const loggedUser = useContext(UserContext);
+
+    const history = useHistory();
+
+    useEffect(() => {
+      if(loggedUser) {
+        setIsLogged(true)
+      }
+    }, [loggedUser]);
+
+
+
+    const handleSignOut = () => {
+      firebase.auth().signOut()
+      .then(() => {
+        setIsLogged(false);
+        history.push('/');
+      }).catch(err => console.log(err));
+    }
+
     return (
         <div className={classes.grow}>
-            <AppBar position="fixed" style={{ background: '#2E3B55' }}>
+            <AppBar style={{ background: '#2E3B55' }}>
                 <Toolbar>
                     <IconButton
                         edge="start"
@@ -193,37 +216,36 @@ export default function NavBar() {
                     </div>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
-                        <IconButton aria-label="show 4 new mails" color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <MailIcon />
-                        </Badge>
-                        </IconButton>
-                        <IconButton aria-label="show 17 new notifications" color="inherit">
-                        <Badge badgeContent={17} color="secondary">
-                            <NotificationsIcon />
-                        </Badge>
-                        </IconButton>
-                        <IconButton
-                        edge="end"
-                        aria-label="account of current user"
-                        aria-controls={menuId}
-                        aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
-                        color="inherit"
-                        >
-                        <AccountCircle />
-                        </IconButton>
+
+                        {isLogged ? (
+                          
+                            <button onClick={handleSignOut}>Sign Out</button>
+                          
+                        ) : (
+                          <IconButton
+                            edge="end"
+                            aria-label="account of current user"
+                            aria-controls={menuId}
+                            aria-haspopup="true"
+                            onClick={handleProfileMenuOpen}
+                            color="inherit"
+                          >
+                            <AccountCircle />
+                          </IconButton>
+                        )
+                      }
+                        
                     </div>
                     <div className={classes.sectionMobile}>
-                        <IconButton
+                      <IconButton
                         aria-label="show more"
                         aria-controls={mobileMenuId}
                         aria-haspopup="true"
                         onClick={handleMobileMenuOpen}
                         color="inherit"
-                        >
-                        <MoreIcon />
-                        </IconButton>
+                      >
+                      <MoreIcon />
+                      </IconButton>
                     </div>
                 </Toolbar>
             </AppBar>

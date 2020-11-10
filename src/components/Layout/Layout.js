@@ -10,7 +10,7 @@ function Layout({children}) {
                 <NavBar />
             </header>
             <main className="content">{children}</main>
-            <footer>
+            <footer className="player">
                 <Player />
             </footer>
         </>
