@@ -1,7 +1,8 @@
 import firebase from 'firebase';
+import 'firebase/auth';
 import 'firebase/firestore';
 
-var firebaseConfig = {
+const config = {
     apiKey: "AIzaSyDDdBm7q5_3UK7LSBWVJBXjKUIrBIbAlcY",
     authDomain: "music-search-75d22.firebaseapp.com",
     databaseURL: "https://music-search-75d22.firebaseio.com",
@@ -12,6 +13,6 @@ var firebaseConfig = {
     measurementId: "G-7TSB23P8YK"
 };
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(config);
 
 export default firebase;

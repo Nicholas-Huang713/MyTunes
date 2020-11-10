@@ -1,18 +1,29 @@
 import React, {useState} from 'react'
-import firebase from '../../firebase';
+import firebase from '../../firebase/firebase';
 import { makeStyles } from '@material-ui/core/styles';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import { useSelector } from 'react-redux';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+
 
 const useStyles = makeStyles((theme) => ({
-  typography: {
-    padding: theme.spacing(2),
-  },
-}));
+    typography: {
+       padding: theme.spacing(2),
+    },
+    appBar: {
+      top: 'auto',
+      bottom: 0,
+      background: '#2E3B55'
+    },
+    grow: {
+      flexGrow: 1,
+    },
+  }));
 
-
-export default function Player({currentSong}) {
+export default function Player() {
     const [anchorEl, setAnchorEl] = useState(null);
     
     const handleLikeClick = (e) => {
@@ -28,11 +39,7 @@ export default function Player({currentSong}) {
                 artist: currentSong.artist.name,
                 cover: currentSong.album.cover_big
             })
-            .then(() => {
-                
-            })
     }
-    const classes = useStyles();
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -40,28 +47,31 @@ export default function Player({currentSong}) {
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
-
+    const classes = useStyles();
+    const currentSong = useSelector(state => state.song.currentSong);
     return (
-        <div>
-            <h3>{currentSong.title}</h3>
-            <audio src={currentSong.preview} controls autoPlay></audio>
-            <Button onClick={(e) => handleLikeClick(e)}>Like</Button>
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-            >
-                <Typography className={classes.typography}>Liked Song.</Typography>
-            </Popover>
-        </div>
+        <AppBar position="fixed" color="primary" className={classes.appBar}>
+            <Toolbar>
+                {currentSong.title}
+                <audio src={currentSong.preview} controls autoPlay></audio>
+                <Button onClick={(e) => handleLikeClick(e)}>Like</Button>
+                <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }}
+                >
+                    <Typography className={classes.typography}>Liked Song.</Typography>
+                </Popover>
+            </Toolbar>
+        </AppBar>
     )
 }

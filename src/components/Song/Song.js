@@ -97,26 +97,26 @@ export default function Song({song, handleSelectSong}) {
                 }}
                 onClick={() => handleSelectSong(song)}
             >
-            <span
-                className={classes.imageSrc}
-                style={{
-                    backgroundImage: `url(${song.album.cover_big})`,
-                }}
-            />
-            <span className={classes.imageBackdrop} />
-            <span className={classes.imageButton}>
-                <Typography
-                    component="span"
-                    variant="subtitle1"
-                    color="inherit"
-                    className={classes.imageTitle}
-                >
-                    <h3>{song.title}</h3>
-                    <h5>{song.album.title}</h5>
-                    {song.artist.name}
-                    
-                </Typography>
-            </span>
+                <span
+                    className={classes.imageSrc}
+                    style={{
+                        backgroundImage: `url(${song.album.cover_big})`,
+                    }}
+                />
+                <span className={classes.imageBackdrop} />
+                <span className={classes.imageButton}>
+                    <Typography
+                        component="span"
+                        variant="subtitle1"
+                        color="inherit"
+                        className={classes.imageTitle}
+                    >
+                        <h3>{song.title}</h3>
+                        <h5>{song.album.title}</h5>
+                        {song.artist.name}
+                        
+                    </Typography>
+                </span>
             </ButtonBase>
         </div>
     )
