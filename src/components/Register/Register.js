@@ -1,14 +1,17 @@
 import React, {useEffect, useState, useContext} from 'react'
 import firebase from '../../firebase/firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {UserContext} from '../../providers/UserProvider';
+import { useSelector, useDispatch } from 'react-redux';
+import {login} from '../../store/actions/userActions';
 import './Register.scss';
 
 export default function Register() {
-    const [isSignedIn, setIsSignedIn] = useState(false);
-    const [redirect, setredirect] = useState(null);
-    const loggedUser = useContext(UserContext);
+    const dispatch = useDispatch();
+    const isLogged = useSelector(state => state.user.isLogged);
+
+    const [redirect, setRedirect] = useState(null);
 
     const uiConfig = {
         signInFlow: "popup",
@@ -20,65 +23,37 @@ export default function Register() {
         ],
         // signInSuccessUrl: '/dashboard',
         callbacks: {
-          signInSuccessWithAuthResult: () => true
+          signInSuccessWithAuthResult: () => false
         }
     }
     
+    const loggedUser = useContext(UserContext);
     const history = useHistory();
+
     useEffect(() => {
-        if(loggedUser) {
-            setredirect('/dashboard');
-        }
+        // console.log("logged user: " + loggedUser)
+        // if(isLogged) {
+        //     history.push('/dashboard');
+        // } else {
+            if(loggedUser) {
+                // dispatch(login(!!loggedUser));
+                setRedirect('/dashboard');
+            }
+        // }
     }, [loggedUser])
 
     if(redirect) {
+        // <Redirect to={redirect} />
         history.push(redirect);
     }
       
-    // useEffect(() => {
-    //     firebase.auth().onAuthStateChanged(user => {
-    //         if(user !== null) {
-    //             console.log( user)
-    //             const fullName = user.displayName.split(' ');
-    //             const first = fullName[0];
-    //             const last = fullName[1];
-
-    //             firebase.firestore().collection('users').onSnapshot((snapshot) => {
-            
-    //                 const emailList = snapshot.docs.map((user) => (
-    //                     user.email
-    //                 ))
-    //                 if(emailList.includes(user.email)){
-    //                     setEmailErr('Email already exists');
-    //                     return;
-    //                 }
-    //             })                
-    //             firebase.firestore().collection('users')
-    //                 .add({
-    //                     firstname: first,
-    //                     lastname: last,
-    //                     email: user.email,
-    //                 })
-    //         }
-    //     })
-    // }, [])
-
     return (
         <div>
             Register
-            {isSignedIn? (
-                <>
-                    <div>Signed In!</div>
-                    <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
-                </>
-                ) : (
-                    <StyledFirebaseAuth 
-                        firebaseAuth={firebase.auth()}
-                        uiConfig={uiConfig}
-                    />
-                )
-            }
-           
+            <StyledFirebaseAuth 
+                firebaseAuth={firebase.auth()}
+                uiConfig={uiConfig}
+            />
          </div>
     )
 }

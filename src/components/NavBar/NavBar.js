@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useContext} from 'react'
 import './NavBar.scss';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -15,12 +15,21 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Button from '@material-ui/core/Button';
 import firebase from '../../firebase/firebase';
 import {UserContext} from '../../providers/UserProvider';
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
+import {searchMusic} from '../../store/actions/songActions';
+import SideNav from '../SideNav/SideNav';
+import { useSelector, useDispatch } from 'react-redux';
+// import {logout} from '../../store/actions/userActions';
 
 const useStyles = makeStyles((theme) => ({
-    grow: {
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
+
+  grow: {
       flexGrow: 1,
       background: "white"
     },
@@ -86,9 +95,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar() {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const homePage = useSelector(state => state.page.homePage);
+    // const isLogged = useSelector(state => state.user.isLogged);
+    const [inputText, setInputText] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-    const [isLogged, setIsLogged] = useState(false);
+    // const [isLogged, setIsLogged] = useState(false);
+    
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -167,28 +181,28 @@ export default function NavBar() {
     );
 
     const loggedUser = useContext(UserContext);
-
     const history = useHistory();
 
-    useEffect(() => {
-      if(loggedUser) {
-        setIsLogged(true)
+    const handleKeyUp = (e) => {
+      e.preventDefault();
+      if(e.key === 'Enter') {
+          e.preventDefault();
+          dispatch(searchMusic(inputText));
+          setInputText('');
       }
-    }, [loggedUser]);
-
-
+    }
 
     const handleSignOut = () => {
       firebase.auth().signOut()
       .then(() => {
-        setIsLogged(false);
+        console.log("Logged Out")
         history.push('/');
-      }).catch(err => console.log(err));
+      }).catch(err => console.log(err.message));
     }
-
+    
     return (
         <div className={classes.grow}>
-            <AppBar style={{ background: '#2E3B55' }}>
+            <AppBar className={classes.appBar} style={{ background: '#2E3B55' }}>
                 <Toolbar>
                     <IconButton
                         edge="start"
@@ -199,41 +213,53 @@ export default function NavBar() {
                         <MenuIcon />
                     </IconButton>
                     <Typography className={classes.title} variant="h6" noWrap>
-                        Material-UI
+                       <Link to="/">MyTunes</Link> 
                     </Typography>
                     <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
+                        
+                        {loggedUser && 
+                          <>
+                            <div className={classes.searchIcon}>
+                                <SearchIcon />
+                            </div>
+                            <InputBase
+                              placeholder="Search…"
+                              classes={{
+                                  root: classes.inputRoot,
+                                  input: classes.inputInput,
+                              }}
+                              inputProps={{ 'aria-label': 'search' }}
+                              value={inputText}
+                              onChange={(e) => setInputText(e.target.value)}
+                              placeholder="Search Artist or Song"
+                              onKeyUp={handleKeyUp}
+                            />
+                          </>
+                        }
                     </div>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
-
-                        {isLogged ? (
-                          
-                            <button onClick={handleSignOut}>Sign Out</button>
-                          
-                        ) : (
-                          <IconButton
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                          >
-                            <AccountCircle />
-                          </IconButton>
-                        )
-                      }
+                      {loggedUser && !homePage ? (
+                        <Link to="/">
+                          <button onClick={handleSignOut}>Sign Out</button>
+                        </Link>
+                      ) : (
+                        <>
+                          <Link to="/register"><Button color="inherit">Register</Button></Link>
+                          <Link to="/login"><Button color="inherit">Login</Button></Link>
+                        </>
+                        // <IconButton
+                        //   edge="end"
+                        //   aria-label="account of current user"
+                        //   aria-controls={menuId}
+                        //   aria-haspopup="true"
+                        //   onClick={handleProfileMenuOpen}
+                        //   color="inherit"
+                        // >
+                        //   <AccountCircle />
+                        // </IconButton>
+                      )
+                    }
                         
                     </div>
                     <div className={classes.sectionMobile}>
@@ -251,6 +277,8 @@ export default function NavBar() {
             </AppBar>
             {renderMobileMenu}
             {renderMenu}
+            {loggedUser && <SideNav />}
+            
         </div>
     )
 }

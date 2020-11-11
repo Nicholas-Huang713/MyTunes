@@ -1,30 +1,30 @@
 import React, {useState, useEffect, useContext} from 'react';
 import Song from '../Song/Song';
 import firebase from '../../firebase/firebase';
-import {searchMusic, playSong} from '../../store/actions/songActions';
-import { useSelector, useDispatch} from 'react-redux';
+import {playSong} from '../../store/actions/songActions';
+import { useSelector, useDispatch } from 'react-redux';
 import { UserContext } from '../../providers/UserProvider';
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import {notHome} from '../../store/actions/pageActions';
 
 export default function Dashboard() {
     const searchList = useSelector(state => state.song.searchList);
-    const [inputText, setInputText] = useState('');
     const [faveList, setFaveList] = useState([]);
     const dispatch = useDispatch();
 
     const user = useContext(UserContext);
-    const [redirect, setredirect] = useState(null);
+    const [redirect, setRedirect] = useState(null);
 
     const history = useHistory();
     useEffect(() => {
-        if (!user) {
-            setredirect("/");
+        dispatch(notHome());
+        if (user === null) {
+            setRedirect("/");
         }
     }, [user]);
 
-    if (redirect) {
-        history.push(redirect)
-    }
+    if (redirect) history.push(redirect);
+    
 
     useEffect(() => {
     const unsubscribe = firebase
@@ -41,14 +41,7 @@ export default function Dashboard() {
         }
     }, [])
 
-    const handleKeyUp = (e) => {
-        e.preventDefault();
-        if(e.key === 'Enter') {
-            e.preventDefault();
-            dispatch(searchMusic(inputText));
-            setInputText('');
-        }
-    }
+    
 
     const handleSelectSong = (song) => {
         dispatch(playSong(song));
@@ -57,21 +50,21 @@ export default function Dashboard() {
     return (
         <div>
             <h1> Music Search</h1>
-            <input 
+            {/* <input 
                 type="text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Search Artist or Song"
                 onKeyUp={handleKeyUp}
-            />
-            <ul>
+            /> */}
+            {/* <ul>
                 {faveList.map((song) => (
-                    <li key={song.id}>{song.id} {song.title}</li>
+                    <li key={song.songId}>{song.songId} {song.title}</li>
                 ))}
-            </ul>
+            </ul> */}
             <ul>
                 {searchList.map((song) => (
-                <li key={song.id}>
+                <li key={song.songId}>
                     <Song song={song} handleSelectSong={handleSelectSong} />
                 </li>
                 ))}

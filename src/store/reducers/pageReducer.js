@@ -1,23 +1,23 @@
-import {LOGIN, LOGOUT} from '../actions/types';
+import {HOME, NOT_HOME} from '../actions/types';
 
 const initialState = {
-    isLogged: false
+    homePage: true
 }
 
 export default function(state = initialState, action) {
     switch(action.type) {
-        case LOGIN: 
+        case HOME: 
             return {
                 ...state,
-                isLogged: action.payload
+                homePage: true
             };
-
-        case LOGOUT: 
+        case NOT_HOME: 
             return {
                 ...state,
-                isLogged: action.payload
+                homePage: false
             };
-            
+        
+        
         default:
             return state;
     }

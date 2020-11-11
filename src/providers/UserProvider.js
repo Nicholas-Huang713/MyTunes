@@ -7,13 +7,15 @@ export default (props) => {
     const [user, setuser] = useState(null)
 
     useEffect(() => {
-        firebase.auth().onAuthStateChanged(async (user) => {
-            if(user !== null) {
+        firebase.auth().onAuthStateChanged((user) => {
+            if(user) {
                 setuser({
                     displayName: user.displayName,
                     email: user.email
                 })
-            } 
+            } else {
+                setuser(null);
+            }
         })
     },[])
 
