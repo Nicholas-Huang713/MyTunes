@@ -22,7 +22,6 @@ import { useHistory, Link } from "react-router-dom";
 import {searchMusic} from '../../store/actions/songActions';
 import SideNav from '../SideNav/SideNav';
 import { useSelector, useDispatch } from 'react-redux';
-// import {logout} from '../../store/actions/userActions';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -97,11 +96,9 @@ export default function NavBar() {
     const classes = useStyles();
     const dispatch = useDispatch();
     const homePage = useSelector(state => state.page.homePage);
-    // const isLogged = useSelector(state => state.user.isLogged);
     const [inputText, setInputText] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-    // const [isLogged, setIsLogged] = useState(false);
     
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -189,6 +186,7 @@ export default function NavBar() {
           e.preventDefault();
           dispatch(searchMusic(inputText));
           setInputText('');
+          history.push('/dashboard');
       }
     }
 
@@ -199,10 +197,15 @@ export default function NavBar() {
         history.push('/');
       }).catch(err => console.log(err.message));
     }
+
+    const linkStyles = {
+      textDecoration: 'none', 
+      color: 'white'
+    }
     
     return (
         <div className={classes.grow}>
-            <AppBar className={classes.appBar} style={{ background: '#2E3B55' }}>
+            <AppBar className={classes.appBar} style={{ background: '#2E3B55'}}>
                 <Toolbar>
                     <IconButton
                         edge="start"
@@ -213,10 +216,9 @@ export default function NavBar() {
                         <MenuIcon />
                     </IconButton>
                     <Typography className={classes.title} variant="h6" noWrap>
-                       <Link to="/">MyTunes</Link> 
+                       <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>MyTunes</Link> 
                     </Typography>
                     <div className={classes.search}>
-                        
                         {loggedUser && 
                           <>
                             <div className={classes.searchIcon}>
@@ -245,8 +247,8 @@ export default function NavBar() {
                         </Link>
                       ) : (
                         <>
-                          <Link to="/register"><Button color="inherit">Register</Button></Link>
-                          <Link to="/login"><Button color="inherit">Login</Button></Link>
+                          <Link to="/register" style={linkStyles}><Button color="inherit">Register</Button></Link>
+                          <Link to="/login" style={linkStyles}><Button color="inherit">Login</Button></Link>
                         </>
                         // <IconButton
                         //   edge="end"

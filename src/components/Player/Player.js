@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import firebase from '../../firebase/firebase';
+import {addFaves} from '../../firebase/fireApi';
 import { makeStyles } from '@material-ui/core/styles';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
@@ -29,16 +29,7 @@ export default function Player() {
     const handleLikeClick = (e) => {
         e.preventDefault();
         setAnchorEl(e.currentTarget);
-        firebase
-            .firestore()
-            .collection('favorites')
-            .add({
-                songId: currentSong.id,
-                title: currentSong.title,
-                preview: currentSong.preview,
-                artist: currentSong.artist.name,
-                cover: currentSong.album.cover_big
-            })
+        addFaves(currentSong);
     }
 
     const handleClose = () => {
@@ -49,6 +40,7 @@ export default function Player() {
     const id = open ? 'simple-popover' : undefined;
     const classes = useStyles();
     const currentSong = useSelector(state => state.song.currentSong);
+    
     return (
         <AppBar position="fixed" color="primary" className={classes.appBar}>
             <Toolbar>

@@ -3,14 +3,9 @@ import firebase from '../../firebase/firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { useHistory } from 'react-router-dom';
 import {UserContext} from '../../providers/UserProvider';
-import { useSelector, useDispatch } from 'react-redux';
-import {login} from '../../store/actions/userActions';
 import './Register.scss';
 
 export default function Register() {
-    const dispatch = useDispatch();
-    const isLogged = useSelector(state => state.user.isLogged);
-
     const [redirect, setRedirect] = useState(null);
 
     const uiConfig = {
@@ -31,19 +26,12 @@ export default function Register() {
     const history = useHistory();
 
     useEffect(() => {
-        // console.log("logged user: " + loggedUser)
-        // if(isLogged) {
-        //     history.push('/dashboard');
-        // } else {
-            if(loggedUser) {
-                // dispatch(login(!!loggedUser));
-                setRedirect('/dashboard');
-            }
-        // }
+        if(loggedUser) {
+            setRedirect('/dashboard');
+        }
     }, [loggedUser])
 
     if(redirect) {
-        // <Redirect to={redirect} />
         history.push(redirect);
     }
       
