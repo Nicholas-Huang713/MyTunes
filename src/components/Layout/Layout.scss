@@ -1,20 +1,17 @@
+@import '../../scss/variables.scss';
+
 .header {
     position: fixed;
     left:0;
     right: 0;
     top: 0;
     width: 100%; 
-    background-color: var(--color-primary);
 }
 
 .content {
     padding: 90px 0 90px 0;
+    padding-left: $layout-padding-left;
     display: flex;
-    // height: 90%;
     justify-content: center;
     align-items: center;
 }
-
-// .player {
-//     height: 10%;
-// }

@@ -1,3 +1,28 @@
 @import './variables';
 @import './reset';
 @import './mixin';
+
+//Dashboard
+@import '../components/Dashboard/Dashboard';
+//Home
+@import '../components/Home/Home';
+//Layout
+@import '../components/Layout/Layout';
+//Login
+@import '../components/Login/Login';
+//Register
+@import '../components/Register/Register';
+//MyLibrary
+@import '../components/MyLibrary/MyLibrary';
+//NavBar
+@import '../components/NavBar/NavBar';
+//Player
+@import '../components/Player/Player';
+//Playlist
+@import '../components/Playlist/Playlist';
+//Profile
+@import '../components/Profile/Profile';
+//SideNav
+@import '../components/SideNav/SideNav';
+//Song
+@import '../components/Song/Song';

@@ -103,6 +103,23 @@ export default function NavBar() {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+    const loggedUser = useContext(UserContext);
+    const history = useHistory();
+
+    const handleSignOut = () => {
+      firebase.auth().signOut()
+      .then(() => {
+        console.log("Logged Out")
+        handleMenuClose();
+        history.push('/');
+      }).catch(err => console.log(err.message));
+    }
+
+    const handleBtnClick = (redirect) => {
+      handleMenuClose();
+      history.push(redirect)
+    }
+   
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -121,8 +138,9 @@ export default function NavBar() {
     };
 
     const menuId = 'primary-search-account-menu';
+
     const renderMenu = (
-        <Menu
+      <Menu
         anchorEl={anchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         id={menuId}
@@ -130,72 +148,98 @@ export default function NavBar() {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={isMenuOpen}
         onClose={handleMenuClose}
-        >
-        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        </Menu>
+      >
+        <MenuItem onClick={() => handleBtnClick('/profile')}>Profile</MenuItem>
+        <MenuItem onClick={() => handleBtnClick('/dashboard')}>Dashboard</MenuItem>
+        <MenuItem onClick={handleSignOut}>Logout</MenuItem>
+      </Menu>
     );
 
     const mobileMenuId = 'primary-search-account-menu-mobile';
-    const renderMobileMenu = (
+
+    let renderMobileMenu;
+    if(loggedUser) {
+      renderMobileMenu = (
         <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        id={mobileMenuId}
-        keepMounted
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={handleMobileMenuClose}
+          anchorEl={mobileMoreAnchorEl}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          id={mobileMenuId}
+          keepMounted
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          open={isMobileMenuOpen}
+          onClose={handleMobileMenuClose}
         >
-        <MenuItem>
+          <MenuItem onClick={() => handleBtnClick('/profile')}>
+              <IconButton
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+              >
+              <AccountCircle />
+              </IconButton>
+              <p>Profile</p>
+          </MenuItem>
+          <MenuItem onClick={() => handleBtnClick('/dashboard')}>
             <IconButton aria-label="show 4 new mails" color="inherit">
             <Badge badgeContent={4} color="secondary">
                 <MailIcon />
             </Badge>
             </IconButton>
-            <p>Messages</p>
-        </MenuItem>
-        <MenuItem>
-            <IconButton aria-label="show 11 new notifications" color="inherit">
-            <Badge badgeContent={11} color="secondary">
-                <NotificationsIcon />
+            <p>Dashboard</p>
+          </MenuItem>
+          <MenuItem onClick={handleSignOut}>
+              <IconButton aria-label="show 11 new notifications" color="inherit">
+              <Badge badgeContent={11} color="secondary">
+                  <NotificationsIcon />
+              </Badge>
+              </IconButton>
+              <p>Logout</p>
+          </MenuItem>
+        </Menu>
+      );
+    } else {
+      renderMobileMenu = (
+        <Menu
+          anchorEl={mobileMoreAnchorEl}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          id={mobileMenuId}
+          keepMounted
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          open={isMobileMenuOpen}
+          onClose={handleMobileMenuClose}
+        >
+          <MenuItem onClick={() => handleBtnClick('/register')}>
+              <IconButton
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+              >
+              <AccountCircle />
+              </IconButton>
+              <p>Register</p>
+          </MenuItem>
+          <MenuItem onClick={() => handleBtnClick('/login')}>
+            <IconButton aria-label="show 4 new mails" color="inherit">
+            <Badge badgeContent={4} color="secondary">
+                <MailIcon />
             </Badge>
             </IconButton>
-            <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={handleProfileMenuOpen}>
-            <IconButton
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-            >
-            <AccountCircle />
-            </IconButton>
-            <p>Profile</p>
-        </MenuItem>
+            <p>Login</p>
+          </MenuItem>
         </Menu>
-    );
-
-    const loggedUser = useContext(UserContext);
-    const history = useHistory();
+      )
+    }
 
     const handleKeyUp = (e) => {
       e.preventDefault();
       if(e.key === 'Enter') {
           e.preventDefault();
           dispatch(searchMusic(inputText));
-          setInputText('');
-          history.push('/dashboard');
+          setInputText('')
+          history.push('/search');
       }
-    }
-
-    const handleSignOut = () => {
-      firebase.auth().signOut()
-      .then(() => {
-        console.log("Logged Out")
-        history.push('/');
-      }).catch(err => console.log(err.message));
     }
 
     const linkStyles = {
@@ -221,7 +265,7 @@ export default function NavBar() {
                     <div className={classes.search}>
                         {loggedUser && 
                           <>
-                            <div className={classes.searchIcon}>
+                            <div className={classes.searchIcon} >
                                 <SearchIcon />
                             </div>
                             <InputBase
@@ -241,28 +285,25 @@ export default function NavBar() {
                     </div>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
-                      {loggedUser && !homePage ? (
-                        <Link to="/">
-                          <button onClick={handleSignOut}>Sign Out</button>
-                        </Link>
-                      ) : (
-                        <>
-                          <Link to="/register" style={linkStyles}><Button color="inherit">Register</Button></Link>
-                          <Link to="/login" style={linkStyles}><Button color="inherit">Login</Button></Link>
-                        </>
-                        // <IconButton
-                        //   edge="end"
-                        //   aria-label="account of current user"
-                        //   aria-controls={menuId}
-                        //   aria-haspopup="true"
-                        //   onClick={handleProfileMenuOpen}
-                        //   color="inherit"
-                        // >
-                        //   <AccountCircle />
-                        // </IconButton>
-                      )
-                    }
-                        
+                      {loggedUser ? (
+                          <IconButton
+                            edge="end"
+                            aria-label="account of current user"
+                            aria-controls={menuId}
+                            aria-haspopup="true"
+                            onClick={handleProfileMenuOpen}
+                            color="inherit"
+                          >
+                            <AccountCircle />
+                            <Typography style={{paddingLeft: '5px'}}>{loggedUser.displayName}</Typography>
+                          </IconButton>
+                        ) : (
+                          <>
+                            <Link to="/register" style={linkStyles}><Button color="inherit">Register</Button></Link>
+                            <Link to="/login" style={linkStyles}><Button color="inherit">Login</Button></Link>
+                          </>
+                        )
+                      }
                     </div>
                     <div className={classes.sectionMobile}>
                       <IconButton
@@ -279,7 +320,7 @@ export default function NavBar() {
             </AppBar>
             {renderMobileMenu}
             {renderMenu}
-            {loggedUser && <SideNav />}
+            { !homePage && <SideNav />}
             
         </div>
     )

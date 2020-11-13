@@ -1,15 +1,13 @@
 import React, {useState, useEffect, useContext} from 'react';
-import Song from '../Song/Song';
 import firebase from '../../firebase/firebase';
 import {checkAndCreateUser} from '../../firebase/fireApi';
-import {playSong} from '../../store/actions/songActions';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { UserContext } from '../../providers/UserProvider';
 import { useHistory } from "react-router-dom";
 import {notHome} from '../../store/actions/pageActions';
 
 export default function Dashboard() {
-    const searchList = useSelector(state => state.song.searchList);
+    
     const [faveList, setFaveList] = useState([]);
     const dispatch = useDispatch();
 
@@ -22,7 +20,7 @@ export default function Dashboard() {
         if (loggedUser === null) {
             setRedirect("/");
         }
-    }, [loggedUser]);
+    }, [loggedUser, dispatch]);
 
     if (redirect) history.push(redirect);
 
@@ -44,25 +42,18 @@ export default function Dashboard() {
         }
     }, [])
 
-    const handleSelectSong = (song) => {
-        dispatch(playSong(song));
-    }
+   
     
     return (
         <div>
-            <h1> Music Search</h1>
+            <h1> User Playlists</h1>
             {/* <ul>
-                {faveList.map((song) => (
-                    <li key={song.songId}>{song.songId} {song.title}</li>
-                ))}
-            </ul> */}
-            <ul>
                 {searchList.map((song) => (
                 <li key={song.songId}>
                     <Song song={song} handleSelectSong={handleSelectSong} />
                 </li>
                 ))}
-            </ul>
+            </ul> */}
             
          </div>
     )

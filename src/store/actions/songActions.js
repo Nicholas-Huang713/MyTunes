@@ -13,7 +13,6 @@ export const searchMusic = (inputText) => dispatch => {
     };
     axios.request(options).then((res) => {
         const songList = res.data.data;
-        console.log("Searched Songs: " + songList);
         dispatch({
             type: SEARCH_MUSIC,
             payload: songList
@@ -30,16 +29,4 @@ export const playSong = (songDetails) => dispatch => {
     })
 }   
 
-
-// export const fetchTodos = () => (dispatch, getState, {getFirebase, getFirestore}) => {
-//     fetch('https://jsonplaceholder.typicode.com/todos')
-//     .then(res => res.json())
-//     // .then(data => console.log(data))
-//     .then(todos => 
-//         dispatch({
-//             type: FETCH_TODOS,
-//             payload: todos.reverse()
-//         })
-//     );
-// };
 
