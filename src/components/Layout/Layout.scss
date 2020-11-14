@@ -10,6 +10,13 @@
 
 .content {
     padding: 90px 0 90px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-padding {
+    padding: 90px 0 90px 0;
     padding-left: $layout-padding-left;
     display: flex;
     justify-content: center;

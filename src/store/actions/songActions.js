@@ -1,4 +1,4 @@
-import {PLAY_SONG, SEARCH_MUSIC} from './types';
+import {PLAY_SONG, SEARCH_MUSIC, SET_PLAYING, SET_PAUSE, SET_CURRENT_SONG, SET_FAVE_ID_LIST, ADD_TO_FAVE_ID_LIST, REMOVE_FROM_FAVE_ID_LIST} from './types';
 import axios from 'axios';
 
 export const searchMusic = (inputText) => dispatch => {
@@ -22,6 +22,7 @@ export const searchMusic = (inputText) => dispatch => {
     });
 };
 
+//play song from playlist and set current song
 export const playSong = (songDetails) => dispatch => {
     dispatch({
         type: PLAY_SONG,
@@ -29,4 +30,41 @@ export const playSong = (songDetails) => dispatch => {
     })
 }   
 
+//set true or false value and set current song
+export const setPlaying = () => dispatch => {
+    dispatch({
+        type: SET_PLAYING,
+    })
+}
 
+//set pause
+export const setPause = () => dispatch => {
+    dispatch({
+        type: SET_PAUSE,
+    })
+}
+
+export const setCurrentSong = (songDetails) => dispatch => {
+    dispatch({
+        type: SET_CURRENT_SONG,
+        payload: songDetails
+    })
+}
+export const setFaveIdList = (idList) => dispatch => {
+    dispatch({
+        type: SET_FAVE_ID_LIST,
+        payload: idList
+    })
+}
+export const addToFaveIdList = (id) => dispatch => {
+    dispatch({
+        type: ADD_TO_FAVE_ID_LIST,
+        payload: id
+    })
+}
+export const removeFromFaveIdList = (id) => dispatch => {
+    dispatch({
+        type: REMOVE_FROM_FAVE_ID_LIST,
+        payload: id
+    })
+}

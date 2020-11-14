@@ -6,7 +6,7 @@ export default function SearchData() {
     const searchList = useSelector(state => state.song.searchList);
     return (
         <>
-            <Playlist songList={searchList} />
+            <Playlist songList={searchList}  />
         </>    
     )
 }

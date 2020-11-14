@@ -320,7 +320,7 @@ export default function NavBar() {
             </AppBar>
             {renderMobileMenu}
             {renderMenu}
-            { !homePage && <SideNav />}
+            { (!homePage || loggedUser) && <SideNav />}
             
         </div>
     )

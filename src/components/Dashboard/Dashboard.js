@@ -4,11 +4,11 @@ import {checkAndCreateUser} from '../../firebase/fireApi';
 import { useDispatch } from 'react-redux';
 import { UserContext } from '../../providers/UserProvider';
 import { useHistory } from "react-router-dom";
-import {notHome} from '../../store/actions/pageActions';
+import mergeImages from 'merge-images';
 
 export default function Dashboard() {
     
-    const [faveList, setFaveList] = useState([]);
+    const [userPlaylists, setUserPlaylists] = useState([]);
     const dispatch = useDispatch();
 
     const loggedUser = useContext(UserContext);
@@ -16,11 +16,11 @@ export default function Dashboard() {
 
     const history = useHistory();
     useEffect(() => {
-        dispatch(notHome());
-        if (loggedUser === null) {
+        // dispatch(notHome());
+        if (!loggedUser) {
             setRedirect("/");
         }
-    }, [loggedUser, dispatch]);
+    }, [loggedUser]);
 
     if (redirect) history.push(redirect);
 
@@ -29,31 +29,32 @@ export default function Dashboard() {
     }, [])
 
     useEffect(() => {
-    const subscribeFaves = firebase
-        .firestore().collection('favorites').onSnapshot((snapshot) => {
-            const faves = snapshot.docs.map((song) => ({
-                songId: song.songId,
-                ...song.data()
-            }))
-            setFaveList(faves);
-        })
+        firebase.firestore().collection('playlists').get()
+            .then((data) => {
+                
+                if(data) {
+                    let userList = [];
+                    // setUserPlaylists(data.data());
+                    data.forEach(doc => {
+                        userList.push(doc.data())
+                        // console.log(doc.data());
+                    })
+                    setUserPlaylists(userList);
+                }
+            })
         return () => {
-            subscribeFaves();
         }
     }, [])
-
-   
-    
+     
     return (
         <div>
             <h1> User Playlists</h1>
-            {/* <ul>
-                {searchList.map((song) => (
-                <li key={song.songId}>
-                    <Song song={song} handleSelectSong={handleSelectSong} />
-                </li>
-                ))}
-            </ul> */}
+            <ul>
+                {userPlaylists.map(user => (
+                    <li key={user.userId}>{user.name}</li>
+                    )) 
+                }
+            </ul>
             
          </div>
     )

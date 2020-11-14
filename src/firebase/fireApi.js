@@ -83,7 +83,7 @@ export const getFaves = (
                     if(!faveList) {
                         return [];
                     } else {
-                        const faveIdList = faveList.map(song => song.song.id);
+                        const faveIdList = faveList.map(song => song.id);
                         // console.log(faveIdList);
                         return faveIdList;
                     }
