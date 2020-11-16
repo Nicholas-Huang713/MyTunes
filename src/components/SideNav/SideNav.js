@@ -1,4 +1,5 @@
 import React from 'react'
+//UI
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,7 +8,12 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
+import './SideNav.scss';
+
+//router
 import { useHistory } from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -46,23 +52,24 @@ export default function SideNav() {
         classes={{
           paper: classes.drawerPaper,
         }}
+
       >
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
             <ListItem key="dashboard" button onClick={() => history.push('/dashboard')}>
-              <ListItemIcon><InboxIcon /></ListItemIcon>
+              <ListItemIcon><DashboardIcon /></ListItemIcon>
                 <ListItemText primary="Dashboard" />
             </ListItem>
             <ListItem key="profile" button onClick={() => history.push('/profile')}>
-              <ListItemIcon><InboxIcon /></ListItemIcon>
+              <ListItemIcon><AccountBoxIcon /></ListItemIcon>
                 <ListItemText primary="Profile" />
             </ListItem>
           </List>
           <Divider />
           <List>
             <ListItem key="favorites" button onClick={() => history.push('/mylibrary')}>
-              <ListItemIcon><InboxIcon /></ListItemIcon>
+              <ListItemIcon><LibraryMusicIcon /></ListItemIcon>
                 <ListItemText primary="Your Library" />
             </ListItem>
           </List>

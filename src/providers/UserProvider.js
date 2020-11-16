@@ -11,7 +11,8 @@ export default (props) => {
             if(user) {
                 setuser({
                     displayName: user.displayName,
-                    email: user.email
+                    email: user.email,
+                    id: user.uid
                 })
             } else {
                 setuser(null);

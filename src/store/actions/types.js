@@ -12,4 +12,6 @@ export const SET_CURRENT_SONG = 'SET_CURRENT_SONG';
 export const SET_FAVE_ID_LIST = 'SET_FAVE_ID_LIST';
 export const ADD_TO_FAVE_ID_LIST = 'ADD_TO_FAVE_ID_LIST';
 export const REMOVE_FROM_FAVE_ID_LIST = 'REMOVE_FROM_FAVE_ID_LIST';
+export const LOG_OUT = 'LOG_OUT';
+export const SET_USER_FAVES = 'SET_USER_FAVES';
 

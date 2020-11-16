@@ -16,7 +16,6 @@ export default function Register() {
           firebase.auth.GithubAuthProvider.PROVIDER_ID,
           firebase.auth.EmailAuthProvider.PROVIDER_ID,
         ],
-        // signInSuccessUrl: '/dashboard',
         callbacks: {
           signInSuccessWithAuthResult: () => false
         }
@@ -36,12 +35,12 @@ export default function Register() {
     }
       
     return (
-        <div>
-            Register
-            <StyledFirebaseAuth 
-                firebaseAuth={firebase.auth()}
-                uiConfig={uiConfig}
-            />
+        <div className="reg-container">
+            <h1>Sign-In</h1>
+                <StyledFirebaseAuth 
+                    firebaseAuth={firebase.auth()}
+                    uiConfig={uiConfig}
+                />
          </div>
     )
 }

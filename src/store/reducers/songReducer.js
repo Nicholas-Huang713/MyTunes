@@ -1,11 +1,13 @@
-import {SEARCH_MUSIC, PLAY_SONG, SET_PLAYING, SET_PAUSE, SET_CURRENT_SONG, SET_FAVE_ID_LIST, ADD_TO_FAVE_ID_LIST, REMOVE_FROM_FAVE_ID_LIST} from '../actions/types';
+import {SET_USER_FAVES, LOG_OUT, SEARCH_MUSIC, PLAY_SONG, SET_PLAYING, SET_PAUSE, SET_CURRENT_SONG, SET_FAVE_ID_LIST, ADD_TO_FAVE_ID_LIST, REMOVE_FROM_FAVE_ID_LIST} from '../actions/types';
 
 const initialState = {
     searchList: [],
     currentSong: {},
     compareSong: {},
     playing: false, 
-    faveIdList: []
+    faveIdList: [],
+    otherUserPlaylist: [],
+    userFaves: {}
 }
 
 export default function(state = initialState, action) {
@@ -50,6 +52,13 @@ export default function(state = initialState, action) {
                 ...state,
                 faveIdList: state.faveIdList.filter((id) => id !== action.payload)
             };
+        case SET_USER_FAVES: 
+            return {
+                ...state,
+                userFaves: action.payload
+            };
+        case LOG_OUT: 
+            return initialState
             
         default:
             return state;

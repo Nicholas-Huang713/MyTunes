@@ -14,6 +14,10 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Slider from '@material-ui/core/Slider';
+import VolumeDown from '@material-ui/icons/VolumeDown';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import './Player.scss';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -49,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
     play: {
         width: "100px"
     },
+    progressBar: {
+        padding: '10px 0 10px 0'
+    },
     like: {
         color: "white"
     },
@@ -58,7 +65,8 @@ const useStyles = makeStyles((theme) => ({
     appBar: {
       top: 'auto',
       bottom: 0,
-      background: '#2E3B55'
+      background: '#2E3B55',
+      padding: '5px'
     },
     grow: {
       flexGrow: 1,
@@ -67,6 +75,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Player() {
     const audioRef = useRef(null);
+    const classes = useStyles();
     //redux
     const dispatch = useDispatch();
     const currentSong = useSelector(state => state.song.currentSong);
@@ -75,9 +84,8 @@ export default function Player() {
     const faveIdList = useSelector(state => state.song.faveIdList);
     //local state
     const [anchorEl, setAnchorEl] = useState(null);
-    // const [currentSong, setCurrentSong] = useState({});
     const [progress, setProgress] = useState(0);
-    const classes = useStyles();
+    const [volume, setVolume] = useState(30);
 
     useEffect(() => {
         if(audioRef && audioRef.current) {
@@ -85,6 +93,18 @@ export default function Player() {
             else audioRef.current.pause();
         }
     }, [playing])
+
+    // useEffect(() => {
+    //     if(audioRef && audioRef.current) {
+    //         audioRef.current.currentTime = pr
+    //     }
+    // }, [progress])
+
+    useEffect(() => {
+        if(audioRef && audioRef.current) {
+            audioRef.current.volume = volume / 100;
+        }
+    }, [volume])
 
     useInterval(() => {
         if(audioRef && audioRef.current) {
@@ -120,6 +140,15 @@ export default function Player() {
         removeFaves(id);
     }
 
+    const handleVolumeChange = (event, newValue) => {
+        setVolume(newValue);
+    };
+
+    const handleProgressChange = (event, newValue) => {
+        setProgress(newValue);
+    };
+
+
     return (
         <>
             {loggedUser &&
@@ -132,10 +161,10 @@ export default function Player() {
                             alignItems="center"
                             wrap="nowrap"
                         >
-                            <Grid item>
+                            <Grid item xs>
                                 <Grid 
                                     container 
-                                    spacing={2}
+                                    spacing={1}
                                     justify="center"
                                     alignItems="center"
                                     wrap="nowrap"
@@ -144,8 +173,8 @@ export default function Player() {
                                         <>
                                             <Grid item><img src={currentSong.album.cover_small} alt="album cover"/></Grid>
                                             <Grid item>
-                                                <Typography><b>{currentSong.title}</b></Typography>
-                                                <Typography>{currentSong.artist.name}</Typography>
+                                                <b>{currentSong.title}</b>
+                                                <br/>{currentSong.artist.name}
                                             </Grid>
                                             <Grid item>
                                                 <Button>
@@ -178,31 +207,53 @@ export default function Player() {
                                 </Grid>
                                     
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={8} sm={6}>
                                 <audio 
                                     src={currentSong.title && currentSong.preview} 
                                     ref={audioRef} 
-                                    // onPause={}
                                     onEnded={() => handlePauseClick()}
                                     autoPlay
                                 />
-                                {currentSong.title? (
-                                    playing ? 
-                                        <PauseCircleOutlineIcon onClick={() => handlePauseClick()} className="player-play-btn" />
-                                        : 
-                                        <PlayCircleOutlineIcon onClick={() => handlePlayClick(currentSong)} className="player-play-btn"/>
-                                ) : (
-                                    <></>
-                                )} 
-                                <br />
-                                <div className={classes.root}>
+                                <Grid 
+                                    container 
+                                    spacing={4}
+                                    justify="center"
+                                    alignItems="center"
+                                    wrap="nowrap"
+                                >
+                                    <Grid item><SkipPreviousIcon /></Grid>
+                                    <Grid item>
+                                        {currentSong.title? (
+                                            playing ? 
+                                                <PauseCircleOutlineIcon onClick={() => handlePauseClick()} fontSize="large" />
+                                                : 
+                                                <PlayCircleOutlineIcon onClick={() => handlePlayClick(currentSong)} fontSize="large"/>
+                                        ) : (
+                                            <PlayCircleOutlineIcon fontSize="large"/>
+                                        )} 
+                                    </Grid>
+                                    <Grid item><SkipNextIcon/></Grid>
+                                </Grid>
+                                <div className={classes.progressBar}>
                                     <LinearProgress variant="determinate" value={progress}/>
-                                    {/* {`${progress}%`} */}
                                 </div>
+                                
                             </Grid>
-                            <Grid item> 
-                                
-                                
+                            <Grid item xs>
+                                <div className={classes.root}>
+                                    <Grid container spacing={2} wrap="nowrap">
+                                        <Grid item>
+                                            <VolumeDown />
+                                        </Grid>
+                                        <Grid item xs>
+                                            {currentSong.title ? 
+                                                <Slider value={volume} onChange={handleVolumeChange} aria-labelledby="continuous-slider" />
+                                                :
+                                                <Slider disabled defaultValue={30} aria-labelledby="disabled-slider" />
+                                            }
+                                        </Grid>
+                                    </Grid>
+                                </div>                         
                             </Grid>
                         </Grid>
                     </Toolbar>

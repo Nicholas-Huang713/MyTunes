@@ -1,4 +1,4 @@
-import {PLAY_SONG, SEARCH_MUSIC, SET_PLAYING, SET_PAUSE, SET_CURRENT_SONG, SET_FAVE_ID_LIST, ADD_TO_FAVE_ID_LIST, REMOVE_FROM_FAVE_ID_LIST} from './types';
+import {LOG_OUT, PLAY_SONG, SEARCH_MUSIC, SET_PLAYING, SET_PAUSE, SET_CURRENT_SONG, SET_FAVE_ID_LIST, ADD_TO_FAVE_ID_LIST, REMOVE_FROM_FAVE_ID_LIST, SET_USER_FAVES} from './types';
 import axios from 'axios';
 
 export const searchMusic = (inputText) => dispatch => {
@@ -66,5 +66,18 @@ export const removeFromFaveIdList = (id) => dispatch => {
     dispatch({
         type: REMOVE_FROM_FAVE_ID_LIST,
         payload: id
+    })
+}
+
+export const logOut = () => dispatch => {
+    dispatch({
+        type: LOG_OUT
+    })
+}
+
+export const setUserFaves = (playlist) => dispatch => {
+    dispatch({
+        type: SET_USER_FAVES,
+        payload: playlist
     })
 }

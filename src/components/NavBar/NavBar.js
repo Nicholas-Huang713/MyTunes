@@ -1,4 +1,6 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext} from 'react';
+import SideNav from '../SideNav/SideNav';
+//UI
 import './NavBar.scss';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,11 +18,14 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
+//firebase
 import firebase from '../../firebase/firebase';
+//logged user context
 import {UserContext} from '../../providers/UserProvider';
+//router
 import { useHistory, Link } from "react-router-dom";
-import {searchMusic} from '../../store/actions/songActions';
-import SideNav from '../SideNav/SideNav';
+//redux
+import {searchMusic, playSong, logOut} from '../../store/actions/songActions';
 import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
@@ -109,7 +114,7 @@ export default function NavBar() {
     const handleSignOut = () => {
       firebase.auth().signOut()
       .then(() => {
-        console.log("Logged Out")
+        dispatch(logOut());
         handleMenuClose();
         history.push('/');
       }).catch(err => console.log(err.message));
@@ -251,16 +256,8 @@ export default function NavBar() {
         <div className={classes.grow}>
             <AppBar className={classes.appBar} style={{ background: '#2E3B55'}}>
                 <Toolbar>
-                    <IconButton
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="open drawer"
-                    >
-                        <MenuIcon />
-                    </IconButton>
                     <Typography className={classes.title} variant="h6" noWrap>
-                       <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>MyTunes</Link> 
+                      MyTunes
                     </Typography>
                     <div className={classes.search}>
                         {loggedUser && 
@@ -299,7 +296,7 @@ export default function NavBar() {
                           </IconButton>
                         ) : (
                           <>
-                            <Link to="/register" style={linkStyles}><Button color="inherit">Register</Button></Link>
+                            {/* <Link to="/register" style={linkStyles}><Button color="inherit">Register</Button></Link> */}
                             <Link to="/login" style={linkStyles}><Button color="inherit">Login</Button></Link>
                           </>
                         )
@@ -320,7 +317,7 @@ export default function NavBar() {
             </AppBar>
             {renderMobileMenu}
             {renderMenu}
-            { (!homePage || loggedUser) && <SideNav />}
+            { loggedUser && <SideNav />}
             
         </div>
     )

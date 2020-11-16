@@ -3,7 +3,8 @@ import React, {useState, useEffect} from 'react'
 import {playSong, 
         setPlaying, 
         setCurrentSong, 
-        setPause, setFaveIdList,
+        setPause, 
+        setFaveIdList,
         addToFaveIdList,
         removeFromFaveIdList} from '../../store/actions/songActions';
 import { useSelector, useDispatch } from 'react-redux';
@@ -31,7 +32,7 @@ import {addFaves, removeFaves} from '../../firebase/fireApi';
 const useStyles = makeStyles({
   table: {
     minWidth: 250,
-  },
+  }
 });
 
 export default function Playlist({songList}) {
@@ -59,7 +60,7 @@ export default function Playlist({songList}) {
         return () => {
             getFaveList();
         }
-    }, [songList, dispatch])
+    }, [songList, dispatch, faveIdList])
 
     const handleSelectSong = (song) => {
         dispatch(playSong(song));
@@ -85,7 +86,7 @@ export default function Playlist({songList}) {
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
-                <TableHead>
+                <TableHead className="playlist-table-header">
                     <TableRow>
                         <TableCell>Title</TableCell>
                         <TableCell align="left">Album</TableCell>
@@ -95,8 +96,14 @@ export default function Playlist({songList}) {
                 </TableHead>
                 <TableBody>
                     {songList.map((song, index) => (
-                        <TableRow key={song.id} className="playlist-table-row" onMouseEnter={() => setCurrentItemHovered(song.id)} onMouseLeave={() => setCurrentItemHovered(null)}>
-                            <TableCell component="th" scope="row" >
+                        <TableRow 
+                            key={song.id} 
+                            className="playlist-table-row" 
+                            onMouseEnter={() => setCurrentItemHovered(song.id)} 
+                            onMouseLeave={() => setCurrentItemHovered(null)}
+                            onDoubleClick= {() => handleSelectSong(song)}
+                        >
+                            <TableCell component="th" scope="row">
                                 <Grid 
                                     container 
                                     spacing={2}

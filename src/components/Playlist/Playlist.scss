@@ -7,3 +7,9 @@
 .sound-wave {
     width: 1.5rem;
 }
+
+.playlist-table-header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 30px;
+}
