@@ -48,7 +48,7 @@ export default function UserPlaylistHeader({songList}) {
                                     onClick={() => removeUserPlaylistFromFaves(songList.userId)}
                                 />
                                 :
-                                <FavoriteBorderIcon 
+                                <FavoriteBorderIcon  
                                     style={{ fontSize: 45 }}
                                     onClick={() => addUserPlaylistToFaves(songList.userId)}
                                 />

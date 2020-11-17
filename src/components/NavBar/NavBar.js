@@ -11,7 +11,6 @@ import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
@@ -25,8 +24,8 @@ import {UserContext} from '../../providers/UserProvider';
 //router
 import { useHistory, Link } from "react-router-dom";
 //redux
-import {searchMusic, playSong, logOut} from '../../store/actions/songActions';
-import { useSelector, useDispatch } from 'react-redux';
+import {searchMusic, logOut} from '../../store/actions/songActions';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -100,7 +99,6 @@ const useStyles = makeStyles((theme) => ({
 export default function NavBar() {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const homePage = useSelector(state => state.page.homePage);
     const [inputText, setInputText] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -154,7 +152,6 @@ export default function NavBar() {
         open={isMenuOpen}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={() => handleBtnClick('/profile')}>Profile</MenuItem>
         <MenuItem onClick={() => handleBtnClick('/dashboard')}>Dashboard</MenuItem>
         <MenuItem onClick={handleSignOut}>Logout</MenuItem>
       </Menu>
@@ -174,7 +171,7 @@ export default function NavBar() {
           open={isMobileMenuOpen}
           onClose={handleMobileMenuClose}
         >
-          <MenuItem onClick={() => handleBtnClick('/profile')}>
+          {/* <MenuItem onClick={() => handleBtnClick('/profile')}>
               <IconButton
               aria-label="account of current user"
               aria-controls="primary-search-account-menu"
@@ -184,7 +181,7 @@ export default function NavBar() {
               <AccountCircle />
               </IconButton>
               <p>Profile</p>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem onClick={() => handleBtnClick('/dashboard')}>
             <IconButton aria-label="show 4 new mails" color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -266,7 +263,6 @@ export default function NavBar() {
                                 <SearchIcon />
                             </div>
                             <InputBase
-                              placeholder="Search…"
                               classes={{
                                   root: classes.inputRoot,
                                   input: classes.inputInput,
@@ -296,7 +292,6 @@ export default function NavBar() {
                           </IconButton>
                         ) : (
                           <>
-                            {/* <Link to="/register" style={linkStyles}><Button color="inherit">Register</Button></Link> */}
                             <Link to="/login" style={linkStyles}><Button color="inherit">Login</Button></Link>
                           </>
                         )

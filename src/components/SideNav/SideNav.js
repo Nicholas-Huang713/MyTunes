@@ -9,7 +9,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
 import './SideNav.scss';
 
@@ -60,10 +59,6 @@ export default function SideNav() {
             <ListItem key="dashboard" button onClick={() => history.push('/dashboard')}>
               <ListItemIcon><DashboardIcon /></ListItemIcon>
                 <ListItemText primary="Dashboard" />
-            </ListItem>
-            <ListItem key="profile" button onClick={() => history.push('/profile')}>
-              <ListItemIcon><AccountBoxIcon /></ListItemIcon>
-                <ListItemText primary="Profile" />
             </ListItem>
           </List>
           <Divider />

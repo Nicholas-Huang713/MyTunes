@@ -1,11 +1,10 @@
-import React, {useEffect} from 'react'
+import React from 'react'
+import Container from '@material-ui/core/Container';
 import './Home.scss'
 
 export default function Home() {
-   
-
     return (
-        <div className='home-bg'>
-        </div>
+        <Container className="home-bg">
+        </Container>
     )
 }

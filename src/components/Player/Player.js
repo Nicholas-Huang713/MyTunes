@@ -1,5 +1,4 @@
 import React, {useState, useContext, useEffect, useRef} from 'react';
-import {useHistory} from 'react-router-dom';
 //UI
 import './Player.scss';
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,8 +15,6 @@ import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Slider from '@material-ui/core/Slider';
 import VolumeDown from '@material-ui/icons/VolumeDown';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import './Player.scss';
 //redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -94,12 +91,6 @@ export default function Player() {
         }
     }, [playing])
 
-    // useEffect(() => {
-    //     if(audioRef && audioRef.current) {
-    //         audioRef.current.currentTime = pr
-    //     }
-    // }, [progress])
-
     useEffect(() => {
         if(audioRef && audioRef.current) {
             audioRef.current.volume = volume / 100;
@@ -143,11 +134,6 @@ export default function Player() {
     const handleVolumeChange = (event, newValue) => {
         setVolume(newValue);
     };
-
-    const handleProgressChange = (event, newValue) => {
-        setProgress(newValue);
-    };
-
 
     return (
         <>
@@ -221,7 +207,7 @@ export default function Player() {
                                     alignItems="center"
                                     wrap="nowrap"
                                 >
-                                    <Grid item><SkipPreviousIcon /></Grid>
+                                    <Grid item></Grid>
                                     <Grid item>
                                         {currentSong.title? (
                                             playing ? 
@@ -232,7 +218,7 @@ export default function Player() {
                                             <PlayCircleOutlineIcon fontSize="large"/>
                                         )} 
                                     </Grid>
-                                    <Grid item><SkipNextIcon/></Grid>
+                                    <Grid item></Grid>
                                 </Grid>
                                 <div className={classes.progressBar}>
                                     <LinearProgress variant="determinate" value={progress}/>

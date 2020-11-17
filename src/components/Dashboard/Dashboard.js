@@ -18,7 +18,6 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,21 +47,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
     const classes = useStyles();
-
     const [userPlaylists, setUserPlaylists] = useState([]);
     const [currentItemHovered, setCurrentItemHovered] = useState(null);
-    const dispatch = useDispatch();
-
-    const loggedUser = useContext(UserContext);
     const [redirect, setRedirect] = useState(null);
-
+    const [faveIdList, setFaveIdList] = useState([]);
+    const dispatch = useDispatch();
+    const loggedUser = useContext(UserContext);
     const history = useHistory();
-
-    const [expanded, setExpanded] = useState(false);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
 
     useEffect(() => {
         if (!loggedUser) {
@@ -93,10 +84,60 @@ export default function Dashboard() {
         return () => {
         }
     }, [])
+
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged((user) => {
+            if(user) {
+                firebase.firestore().collection('users').doc(user.uid).get()
+                    .then((data) => {
+                        if(data) {
+                            const list = data.data().favePlaylistIds;
+                            setFaveIdList(list);
+                        } 
+                    }).catch(err => console.log(err)); 
+            } 
+        })
+    }, [faveIdList])
      
     return (
         <div>
-            <h1> User Playlists</h1>
+            {faveIdList.length > 0 && <h1> Favorite Playlists</h1>}
+            <Grid container spacing={5}>
+                { userPlaylists.length > 0 && 
+                    userPlaylists.map(user => (
+                        (user.userId !== loggedUser.id && user.liked.length > 0 && faveIdList.includes(user.userId)) &&
+                        <Grid item key={user.userId}>
+                            <Card 
+                                className={classes.root}
+                                onMouseEnter={() => setCurrentItemHovered(user.userId)} 
+                                onMouseLeave={() => setCurrentItemHovered(null)}
+                             >
+                                <Link to="/userfaves" onClick={() => dispatch(setUserFaves(user))}><img src={user.liked[0].album.cover_medium} alt="playlist cover" /></Link>
+                                <CardContent>
+                                    <Grid 
+                                        container
+                                        justify="space-between"
+                                        alignItems="center"
+                                    >
+                                        <Grid item>
+                                            <Typography variant="body2" color="textSecondary" component="p">
+                                                By {user.name}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            {currentItemHovered === user.userId &&
+                                                <PlayCircleFilledIcon />
+                                            }
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    )) 
+                }
+            </Grid>
+            <br/>
+            {userPlaylists.length > 0 && <h1>User Playlists</h1>}
             <Grid container spacing={5}>
                 { userPlaylists.length > 0 && 
                     userPlaylists.map(user => (
@@ -106,7 +147,6 @@ export default function Dashboard() {
                                 className={classes.root}
                                 onMouseEnter={() => setCurrentItemHovered(user.userId)} 
                                 onMouseLeave={() => setCurrentItemHovered(null)}
-                                // onDoubleClick= {() => handleSelectSong(song)}
                             >
                                 <Link to="/userfaves" onClick={() => dispatch(setUserFaves(user))}><img src={user.liked[0].album.cover_medium} alt="playlist cover" /></Link>
                                 <CardContent>
