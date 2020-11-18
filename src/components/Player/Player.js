@@ -191,7 +191,6 @@ export default function Player() {
                                     }
                                     
                                 </Grid>
-                                    
                             </Grid>
                             <Grid item xs={8} sm={6}>
                                 <audio 
