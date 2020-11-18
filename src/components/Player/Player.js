@@ -157,10 +157,10 @@ export default function Player() {
                                 >
                                     {currentSong.title &&
                                         <>
-                                            <Grid item><img src={currentSong.album.cover_small} alt="album cover"/></Grid>
-                                            <Grid item>
-                                                <b>{currentSong.title}</b>
-                                                <br/>{currentSong.artist.name}
+                                            <Grid item><img src={currentSong.album.cover_small} alt="album cover" style={{height: '100%'}}/></Grid>
+                                            <Grid item className={classes.title}>
+                                                    <b>{currentSong.title}</b>
+                                                    <br/>{currentSong.artist.name}
                                             </Grid>
                                             <Grid item>
                                                 <Button>
@@ -189,7 +189,6 @@ export default function Player() {
                                             </Grid>
                                         </>
                                     }
-                                    
                                 </Grid>
                             </Grid>
                             <Grid item xs={8} sm={6}>
@@ -222,7 +221,6 @@ export default function Player() {
                                 <div className={classes.progressBar}>
                                     <LinearProgress variant="determinate" value={progress}/>
                                 </div>
-                                
                             </Grid>
                             <Grid item xs>
                                 <div className={classes.root}>
@@ -232,9 +230,9 @@ export default function Player() {
                                         </Grid>
                                         <Grid item xs>
                                             {currentSong.title ? 
-                                                <Slider value={volume} onChange={handleVolumeChange} aria-labelledby="continuous-slider" />
+                                                <Slider value={volume} onChange={handleVolumeChange} style={{width: '85%'}} aria-labelledby="continuous-slider" />
                                                 :
-                                                <Slider disabled defaultValue={30} aria-labelledby="disabled-slider" />
+                                                <Slider disabled defaultValue={30} aria-labelledby="disabled-slider" style={{width: '80%'}}/>
                                             }
                                         </Grid>
                                     </Grid>

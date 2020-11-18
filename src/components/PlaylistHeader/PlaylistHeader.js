@@ -8,7 +8,6 @@ export default function PlaylistHeader({songList}) {
     const [artistName, setArtistName] = useState('');
 
     useEffect(() => {
-        // console.log(songList)
         if(songList.length >= 4) {
             grabRandomCovers();
             setArtistName(songList[0].artist.name);
@@ -32,7 +31,7 @@ export default function PlaylistHeader({songList}) {
     }
     return (
         <Container className="playlist-header-wrapper">
-            <Grid 
+            <Grid    
                 container
                 spacing={2}
                 alignItems="center"
@@ -41,12 +40,12 @@ export default function PlaylistHeader({songList}) {
                     <Grid item>
                         <Grid container direction="column">
                             <Grid item>
-                                <img src={coverList[0]} />
-                                <img src={coverList[1]} />
+                                <img src={coverList[0]} alt="album cover" />
+                                <img src={coverList[1]} alt="album cover"/>
                             </Grid>
                             <Grid item>
-                                <img src={coverList[2]} />
-                                <img src={coverList[3]} />
+                                <img src={coverList[2]} alt="album cover" />
+                                <img src={coverList[3]} alt="album cover" />
                             </Grid>
                         </Grid>
                     </Grid>
